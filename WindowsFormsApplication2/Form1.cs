@@ -29,39 +29,56 @@ namespace WindowsFormsApplication2 {
             process.Start();
 
         }
-        Boolean check = true;
+        Boolean check = false;
+        Thread t;
         string html;
         private void Download2_Click(object sender,EventArgs e) {
-            check = true;
-            OpenFileDialog o = new OpenFileDialog();
-            if (o.ShowDialog() == DialogResult.OK) {
-                html = File.ReadAllText(o.FileName);
-                Thread t = new Thread(threadDow);
-                t.Start();
+            if (check == false) {
+                check = true;
+                OpenFileDialog o = new OpenFileDialog();
+                if (o.ShowDialog() == DialogResult.OK) {
+                    html = File.ReadAllText(o.FileName);
+                    t = new Thread(threadDow);
+                    t.Start();
+                }
             }
+
         }
         void threadDow() {
-            string regex = txtRegex.Text;
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            Regex reg = new Regex(regex);
-            int count = 0;
-            Match match = reg.Match(html);
-            do {
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "/C youtube-dl https://www.facebook.com" + match.ToString();
-                process.StartInfo = startInfo;
-                process.Start();
-                MethodInvoker inv = delegate {
-                    this.status.Text = count + "/" + match.Length;
-                };
-                this.Invoke(inv);
-                process.WaitForExit();
-                match = match.NextMatch();
-                count++;
-            } while (match != Match.Empty && check == true);
+            if (check) {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                string regex = txtRegex.Text;
+                Regex reg = new Regex(regex);
+                int count = 0;
+                Match match = reg.Match(html);
+                do {
+                    if (match.ToString().Equals(match.NextMatch().ToString())) {
+                        match = match.NextMatch();
+                    }
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.Arguments = "/C youtube-dl https://www.facebook.com/" + match.ToString();
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    MethodInvoker inv = delegate {
+                        this.status.Text = count + "/" + match.Length;
+                    };
+                    this.Invoke(inv);
+                    process.WaitForExit();
+                    count++;
+                    if (match.NextMatch() == Match.Empty) {
+                        inv = delegate {
+                            this.status.Text = "Done :" + t + "/" + match.Length;
+                        };
+                        this.Invoke(inv);
+                    }
+                } while (match != Match.Empty);
+            }
+            check = false;
+
         }
+
 
         private void Stop_Click(object sender,EventArgs e) {
             check = false;

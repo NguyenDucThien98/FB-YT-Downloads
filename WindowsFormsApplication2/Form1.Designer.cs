@@ -77,6 +77,7 @@
             this.txtRegex.Name = "txtRegex";
             this.txtRegex.Size = new System.Drawing.Size(302, 20);
             this.txtRegex.TabIndex = 6;
+            this.txtRegex.Text = "136602110319530/videos/[0-9]{15}";
             // 
             // label4
             // 
@@ -128,7 +129,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 216);
+            this.ClientSize = new System.Drawing.Size(408, 139);
             this.Controls.Add(this.status);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.Stop);
