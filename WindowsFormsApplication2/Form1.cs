@@ -52,13 +52,13 @@ namespace WindowsFormsApplication2 {
                 string regex = txtRegex.Text;
                 Regex reg = new Regex(regex);
                 int count = 0;
+                string id;
                 Match match = reg.Match(html);
-                do {
-                    if (match.ToString().Equals(match.NextMatch().ToString())) {
-                        match = match.NextMatch();
-                    }
+                while (match != Match.Empty) {
+                    id = match.ToString();
+                    id = id.Replace("videos/","");
                     startInfo.FileName = "cmd.exe";
-                    startInfo.Arguments = "/C youtube-dl https://www.facebook.com/" + match.ToString();
+                    startInfo.Arguments = "/C youtube-dl https://www.facebook.com/watch/?v=" + id;
                     process.StartInfo = startInfo;
                     process.Start();
                     MethodInvoker inv = delegate {
@@ -66,6 +66,7 @@ namespace WindowsFormsApplication2 {
                     };
                     this.Invoke(inv);
                     process.WaitForExit();
+
                     count++;
                     if (match.NextMatch() == Match.Empty) {
                         inv = delegate {
@@ -73,10 +74,10 @@ namespace WindowsFormsApplication2 {
                         };
                         this.Invoke(inv);
                     }
-                } while (match != Match.Empty);
+                    match = match.NextMatch().NextMatch();
+                }
             }
             check = false;
-
         }
 
 

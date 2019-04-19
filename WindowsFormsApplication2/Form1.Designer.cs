@@ -77,7 +77,7 @@
             this.txtRegex.Name = "txtRegex";
             this.txtRegex.Size = new System.Drawing.Size(302, 20);
             this.txtRegex.TabIndex = 6;
-            this.txtRegex.Text = "136602110319530/videos/[0-9]{15}";
+            this.txtRegex.Text = "videos/[0-9]{15}";
             // 
             // label4
             // 
