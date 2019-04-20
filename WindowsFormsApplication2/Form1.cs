@@ -61,19 +61,11 @@ namespace WindowsFormsApplication2 {
                     startInfo.Arguments = "/C youtube-dl https://www.facebook.com/watch/?v=" + id;
                     process.StartInfo = startInfo;
                     process.Start();
-                    MethodInvoker inv = delegate {
-                        this.status.Text = count + "/" + match.Length;
-                    };
-                    this.Invoke(inv);
+                   
                     process.WaitForExit();
 
                     count++;
-                    if (match.NextMatch() == Match.Empty) {
-                        inv = delegate {
-                            this.status.Text = "Done :" + t + "/" + match.Length;
-                        };
-                        this.Invoke(inv);
-                    }
+                    
                     match = match.NextMatch().NextMatch();
                 }
             }
